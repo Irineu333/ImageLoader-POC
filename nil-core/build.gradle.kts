@@ -26,6 +26,7 @@ kotlin {
             // compose
             implementation(compose.runtime)
             implementation(compose.ui)
+            implementation(compose.foundation)
 
             // coroutines
             implementation(libs.kotlinx.coroutines)
