@@ -7,13 +7,12 @@ import com.neoutils.nil.core.painter.PainterResource
 import com.neoutils.nil.core.util.Level
 import com.neoutils.nil.interceptor.memoryCache.model.MemoryCacheExtra
 import com.neoutils.nil.interceptor.memoryCache.util.LruMemoryCache
-import com.neoutils.nil.util.Remember
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-private val remember = Remember<LruMemoryCache>()
-
 class MemoryCacheInterceptor : Interceptor(Level.REQUEST, Level.PAINTER) {
+
+    private val caches = mutableMapOf<MemoryCacheExtra, LruMemoryCache>()
 
     override fun intercept(
         settings: Settings,
@@ -22,7 +21,7 @@ class MemoryCacheInterceptor : Interceptor(Level.REQUEST, Level.PAINTER) {
 
         val extra = settings.extras[MemoryCacheExtra.ExtrasKey]
 
-        val cache = remember(extra) {
+        val cache = caches.getOrPut(extra) {
             LruMemoryCache(
                 maxSize = extra.maxSize
             )

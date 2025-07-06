@@ -9,11 +9,11 @@ import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-private val cache = mutableMapOf<Request, ValueWithTime<PainterResource>>()
-
 class LruMemoryCache(
     private val maxSize: Int,
 ) : Cache<Request, PainterResource> {
+
+    private val cache = mutableMapOf<Request, ValueWithTime<PainterResource>>()
 
     init {
         ensureSize()

@@ -9,14 +9,13 @@ import com.neoutils.nil.core.util.Level
 import com.neoutils.nil.core.util.Resource
 import com.neoutils.nil.interceptor.diskcache.model.DiskCacheExtra
 import com.neoutils.nil.interceptor.diskcache.util.LruDiskCache
-import com.neoutils.nil.util.Remember
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import okio.ByteString.Companion.encodeUtf8
 
-private val remember = Remember<LruDiskCache>()
-
 class DiskCacheInterceptor : Interceptor(Level.REQUEST, Level.DATA) {
+
+    private val caches = mutableMapOf<DiskCacheExtra, LruDiskCache>()
 
     private val Request.hash
         get() = when (this) {
@@ -36,7 +35,7 @@ class DiskCacheInterceptor : Interceptor(Level.REQUEST, Level.DATA) {
 
         val extra = settings.extras[DiskCacheExtra.ExtrasKey]
 
-        val cache = remember(extra) {
+        val cache = caches.getOrPut(extra) {
             LruDiskCache(
                 fileSystem = extra.fileSystem,
                 path = extra.path,
