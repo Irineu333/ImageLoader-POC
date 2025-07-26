@@ -1,7 +1,7 @@
 package com.neoutils.nil.decoder.gif.impl
 
 import com.neoutils.nil.core.exception.NotSupportFormat
-import com.neoutils.nil.core.extension.toPainterResource
+import com.neoutils.nil.core.extension.painterCatching
 import com.neoutils.nil.core.util.Extras
 import com.neoutils.nil.core.foundation.Decoder
 import com.neoutils.nil.core.util.ByteArrayKey
@@ -30,7 +30,7 @@ class SkiaGifDecoder : Decoder {
             return PainterResource.Result.Failure(NotSupportFormat())
         }
 
-        return runCatching {
+        return painterCatching {
             val params = extras[GifExtra.ExtrasKey]
 
             val codec = cache.get(input.key) {
@@ -41,7 +41,7 @@ class SkiaGifDecoder : Decoder {
                 codec = codec,
                 repeatCount = params.repeatCount
             )
-        }.toPainterResource()
+        }
     }
 
     override suspend fun support(input: ByteArray): Support {

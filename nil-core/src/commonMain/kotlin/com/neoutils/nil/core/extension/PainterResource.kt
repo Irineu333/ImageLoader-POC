@@ -14,3 +14,12 @@ fun PainterResource.merge(
         is PainterResource.Result.Success -> this
     }
 }
+
+fun PainterResource.getOrElse(
+    block: () -> PainterResource.Result
+): PainterResource.Result {
+    return when (this) {
+        is PainterResource.Result.Success -> this
+        else -> block()
+    }
+}

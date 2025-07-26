@@ -2,8 +2,8 @@ package com.neoutils.nil.decoder.svg.impl
 
 import com.caverock.androidsvg.SVG
 import com.neoutils.nil.core.exception.NotSupportFormat
-import com.neoutils.nil.core.extension.toPainterResource
 import com.neoutils.nil.core.constant.DensityExtrasKey
+import com.neoutils.nil.core.extension.painterCatching
 import com.neoutils.nil.core.util.Extras
 import com.neoutils.nil.core.foundation.Decoder
 import com.neoutils.nil.core.painter.PainterResource
@@ -22,12 +22,12 @@ class AndroidSvgDecoder() : Decoder {
             return PainterResource.Result.Failure(NotSupportFormat())
         }
 
-        return runCatching {
+        return painterCatching {
 
             val density = extras[DensityExtrasKey]
 
             AndroidSvgPainter(SVG.getFromInputStream(input.inputStream()), density)
-        }.toPainterResource()
+        }
     }
 
     override suspend fun support(input: ByteArray): Support {

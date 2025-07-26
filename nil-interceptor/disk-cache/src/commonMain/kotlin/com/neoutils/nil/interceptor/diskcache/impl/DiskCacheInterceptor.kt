@@ -27,12 +27,12 @@ class DiskCacheInterceptor : Interceptor(Level.REQUEST, Level.DATA) {
             else -> null
         }
 
-    override fun intercept(
+    override suspend fun sync(
         settings: Settings,
         chain: Chain
-    ): Flow<Chain> {
+    ): Chain {
 
-        val key = chain.request.hash ?: return flowOf(chain)
+        val key = chain.request.hash ?: return chain
 
         val extra = settings.extras[DiskCacheExtra.ExtrasKey]
 
@@ -44,21 +44,19 @@ class DiskCacheInterceptor : Interceptor(Level.REQUEST, Level.DATA) {
             )
         }
 
-        return flowOf(
-            when (val data = chain.data) {
-                is Resource.Result.Success<ByteArray> if extra.enabled -> {
-                    cache[key] = data.value
-                    chain
-                }
-
-                is Resource.Loading if extra.enabled && cache.has(key) -> {
-                    chain.copy(
-                        data = Resource.Result.Success(cache[key])
-                    )
-                }
-
-                else -> chain
+        return when (val data = chain.data) {
+            is Resource.Result.Success<ByteArray> if extra.enabled -> {
+                cache[key] = data.value
+                chain
             }
-        )
+
+            is Resource.Loading if extra.enabled && cache.has(key) -> {
+                chain.copy(
+                    data = Resource.Result.Success(cache[key])
+                )
+            }
+
+            else -> chain
+        }
     }
 }

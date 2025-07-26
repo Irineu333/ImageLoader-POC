@@ -1,5 +1,8 @@
 package com.neoutils.nil.core.contract
 
-interface Request {
+abstract class Request private  constructor(){
+    abstract class Async: Request()
+    abstract class Sync: Request()
+
     companion object
 }

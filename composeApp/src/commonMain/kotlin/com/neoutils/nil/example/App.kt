@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.neoutils.nil.core.composable.asyncPainterResource
+import com.neoutils.nil.core.composable.painterResource
 import com.neoutils.nil.core.contract.Request
 import com.neoutils.nil.core.painter.PainterResource
 import com.neoutils.nil.decoder.gif.extension.gif
@@ -27,19 +28,13 @@ fun App() = Box(
     contentAlignment = Alignment.Center,
     modifier = Modifier.fillMaxSize()
 ) {
-    val resource = asyncPainterResource(
-        request = Request.network("https://cataas.com/cat"),
+    val resource = painterResource(
+        request = Request.resource(Res.drawable.crazy_cat),
     ) {
         decoders {
             xml()
             svg()
             gif()
-        }
-
-        extras {
-            diskCache {
-                enabled = false
-            }
         }
     }
 

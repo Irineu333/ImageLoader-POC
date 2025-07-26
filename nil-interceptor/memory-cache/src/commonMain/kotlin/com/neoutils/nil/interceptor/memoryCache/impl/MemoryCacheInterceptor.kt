@@ -15,10 +15,10 @@ class MemoryCacheInterceptor : Interceptor(Level.REQUEST, Level.PAINTER) {
 
     private val caches = Remember<LruMemoryCache>()
 
-    override fun intercept(
+    override suspend fun sync(
         settings: Settings,
         chain: Chain
-    ): Flow<Chain> {
+    ): Chain {
 
         val extra = settings.extras[MemoryCacheExtra.ExtrasKey]
 
@@ -28,21 +28,19 @@ class MemoryCacheInterceptor : Interceptor(Level.REQUEST, Level.PAINTER) {
             )
         }
 
-        return flowOf(
-            when (chain.painter) {
-                is PainterResource.Result.Success if extra.enabled -> {
-                    cache[chain.request] = chain.painter
-                    chain
-                }
-
-                is PainterResource.Loading if extra.enabled && cache.has(chain.request) -> {
-                    chain.copy(
-                        painter = cache[chain.request]
-                    )
-                }
-
-                else -> chain
+        return when (chain.painter) {
+            is PainterResource.Result.Success if extra.enabled -> {
+                cache[chain.request] = chain.painter
+                chain
             }
-        )
+
+            is PainterResource.Loading if extra.enabled && cache.has(chain.request) -> {
+                chain.copy(
+                    painter = cache[chain.request]
+                )
+            }
+
+            else -> chain
+        }
     }
 }

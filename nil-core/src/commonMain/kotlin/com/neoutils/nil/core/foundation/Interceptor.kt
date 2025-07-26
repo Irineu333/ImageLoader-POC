@@ -8,6 +8,7 @@ import com.neoutils.nil.core.model.Settings
 import com.neoutils.nil.core.util.Dynamic
 import com.neoutils.nil.core.util.Level
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 val DefaultInterceptors = listOf(
     FetchInterceptor(),
@@ -19,8 +20,16 @@ val LocalInterceptors = staticCompositionLocalOf {
 }
 
 abstract class Interceptor(vararg val levels: Level) {
-    abstract fun intercept(
+
+    open fun async(
         settings: Settings,
         chain: Chain
-    ): Flow<Chain>
+    ): Flow<Chain> = flow {
+        emit(sync(settings, chain))
+    }
+
+    abstract suspend fun sync(
+        settings: Settings,
+        chain: Chain
+    ): Chain
 }
