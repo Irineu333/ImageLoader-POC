@@ -50,6 +50,26 @@ class NetworkFetcher : Fetcher<RequestNetwork>(RequestNetwork::class) {
 
         awaitClose()
     }
+
+    override suspend fun get(
+        input: RequestNetwork,
+        extras: Extras
+    ) = runCatching {
+        val headers = extras[HeadersExtrasKey]
+        val client = extras[HttpClientExtra]
+
+        val response = client.request(input.url) {
+            method = input.method
+
+            headers.forEach {
+                this.headers[it.key] = it.value
+            }
+        }
+
+        Resource.Result.Success(value = response.bodyAsBytes())
+    }.getOrElse {
+        Resource.Result.Failure(it)
+    }
 }
 
 private fun HttpRequestBuilder.onProgress(

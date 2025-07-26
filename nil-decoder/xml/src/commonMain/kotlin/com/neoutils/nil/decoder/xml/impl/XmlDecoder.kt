@@ -1,8 +1,8 @@
 package com.neoutils.nil.decoder.xml.impl
 
 import com.neoutils.nil.core.exception.NotSupportFormat
-import com.neoutils.nil.core.extension.toPainterResource
 import com.neoutils.nil.core.constant.DensityExtrasKey
+import com.neoutils.nil.core.extension.painterCatching
 import com.neoutils.nil.core.util.Extras
 import com.neoutils.nil.core.foundation.Decoder
 import com.neoutils.nil.core.painter.PainterResource
@@ -23,12 +23,12 @@ class XmlDecoder() : Decoder {
             return PainterResource.Result.Failure(NotSupportFormat())
         }
 
-        return runCatching {
+        return painterCatching {
 
             val density = extras[DensityExtrasKey]
 
             VectorPainter(input.decodeToImageVector(density), density)
-        }.toPainterResource()
+        }
     }
 
     override suspend fun support(input: ByteArray): Support {

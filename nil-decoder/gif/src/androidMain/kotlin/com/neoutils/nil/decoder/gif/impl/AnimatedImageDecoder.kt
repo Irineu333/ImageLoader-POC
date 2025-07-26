@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.neoutils.nil.core.exception.NotSupportFormat
-import com.neoutils.nil.core.extension.toPainterResource
+import com.neoutils.nil.core.extension.painterCatching
 import com.neoutils.nil.core.util.Extras
 import com.neoutils.nil.core.foundation.Decoder
 import com.neoutils.nil.core.util.ByteArrayKey
@@ -34,7 +34,7 @@ class AnimatedImageDecoder : Decoder {
             return PainterResource.Result.Failure(NotSupportFormat())
         }
 
-        return runCatching {
+        return painterCatching {
             val params = extras[GifExtra.ExtrasKey]
 
             when (val drawable = input.toDrawable()) {
@@ -48,7 +48,7 @@ class AnimatedImageDecoder : Decoder {
                     DrawablePainter(drawable)
                 }
             }
-        }.toPainterResource()
+        }
     }
 
     override suspend fun support(input: ByteArray): Support {

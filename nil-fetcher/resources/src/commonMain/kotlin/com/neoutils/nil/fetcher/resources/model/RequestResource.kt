@@ -7,4 +7,4 @@ import org.jetbrains.compose.resources.ResourceEnvironment
 data class RequestResource(
     val res: DrawableResource,
     val environment: ResourceEnvironment
-) : Request
+) : Request.Sync()

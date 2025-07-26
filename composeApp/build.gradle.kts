@@ -52,6 +52,7 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
 
             // coroutines
             implementation(libs.kotlinx.coroutines)
@@ -123,6 +124,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+}
+
+dependencies {
+    debugImplementation(libs.androidx.ui.tooling)
 }
 
 compose.resources {

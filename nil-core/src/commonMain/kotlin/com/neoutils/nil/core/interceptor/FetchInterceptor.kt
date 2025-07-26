@@ -17,7 +17,32 @@ private val error = FetcherErrorStrings()
 
 class FetchInterceptor : Interceptor(Level.DATA) {
 
-    override fun intercept(
+    override suspend fun sync(settings: Settings, chain: Chain): Chain {
+
+        if (!chain.painter.isLoading) return chain
+        if (!chain.data.isLoading) return chain
+
+        return when (val fetcher = settings.fetcherFor(chain.request)) {
+            is Resource.Result.Failure -> {
+                chain.copy(
+                    data = Resource.Result.Failure(
+                        fetcher.throwable
+                    )
+                )
+            }
+
+            is Resource.Result.Success<Fetcher<Request>> -> {
+                chain.copy(
+                    data = fetcher.value.get(
+                        input = chain.request,
+                        extras = settings.extras
+                    )
+                )
+            }
+        }
+    }
+
+    override fun async(
         settings: Settings,
         chain: Chain
     ): Flow<Chain> {

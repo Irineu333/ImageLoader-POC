@@ -11,6 +11,7 @@ fun Result<Painter>.toPainterResource(): PainterResource.Result {
         PainterResource.Result.Failure(checkNotNull(exceptionOrNull()))
     }
 }
+
 fun <T> Result<T>.toResource(): Resource.Result<T> {
     return if (isSuccess) {
         Resource.Result.Success(getOrThrow())
@@ -18,3 +19,6 @@ fun <T> Result<T>.toResource(): Resource.Result<T> {
         Resource.Result.Failure(checkNotNull(exceptionOrNull()))
     }
 }
+
+inline fun <T> resourceCatching(block: () -> T) = runCatching(block).toResource()
+inline fun painterCatching(block: () -> Painter) = runCatching(block).toPainterResource()

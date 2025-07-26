@@ -39,6 +39,7 @@ compose-ui-graphics = { module = "org.jetbrains.compose.ui:ui-graphics", version
 
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 cache4k = { module = "io.github.reactivecircus.cache4k:cache4k", version.ref = "cache4k" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "cmp" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "agp" }

@@ -2,7 +2,7 @@ package com.neoutils.nil.decoder.bitmap.impl
 
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import com.neoutils.nil.core.exception.NotSupportFormat
-import com.neoutils.nil.core.extension.toPainterResource
+import com.neoutils.nil.core.extension.painterCatching
 import com.neoutils.nil.core.util.Extras
 import com.neoutils.nil.core.foundation.Decoder
 import com.neoutils.nil.core.painter.PainterResource
@@ -21,9 +21,9 @@ class BitmapDecoder : Decoder {
             return PainterResource.Result.Failure(NotSupportFormat())
         }
 
-        return runCatching {
+        return painterCatching {
             BitmapPainter(input.decodeToImageBitmap())
-        }.toPainterResource()
+        }
     }
 
     override suspend fun support(input: ByteArray): Support {

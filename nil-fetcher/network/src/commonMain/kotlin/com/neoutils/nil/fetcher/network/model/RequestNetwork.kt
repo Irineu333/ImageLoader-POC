@@ -8,4 +8,4 @@ data class RequestNetwork(
     val url: String,
     val method: HttpMethod,
     override val key: String = url
-) : Request, Cacheable
+) : Request.Async(), Cacheable

@@ -40,6 +40,21 @@ fun asyncPainterResource(
 }
 
 @Composable
+fun painterResource(
+    request: Request.Sync,
+    settings: @NilDsl SettingsScope.() -> Unit = {}
+): PainterResource {
+
+    val settings = rememberSettings(settings)
+
+    val nil = remember(settings) { Nil(settings) }
+
+    val painter = remember(nil, request) { nil.sync(request) }
+
+    return rememberPainterResource(painter)
+}
+
+@Composable
 private fun rememberPainterResource(
     resource: PainterResource,
     placeholder: Painter = EmptyPainter,
