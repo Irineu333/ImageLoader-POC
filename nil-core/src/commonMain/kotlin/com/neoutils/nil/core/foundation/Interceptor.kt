@@ -9,8 +9,11 @@ import com.neoutils.nil.core.model.Settings
 import com.neoutils.nil.core.util.Dynamic
 import com.neoutils.nil.core.util.Level
 
+import com.neoutils.nil.core.interceptor.ResizeInterceptor
+
 val DefaultInterceptors = listOf(
     FetchInterceptor(),
+    ResizeInterceptor(),
     DecodeInterceptor()
 )
 

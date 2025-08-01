@@ -1,10 +1,12 @@
 package com.neoutils.nil.fetcher.resources.model
 
 import com.neoutils.nil.core.contract.Request
+import com.neoutils.nil.core.model.Resize
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ResourceEnvironment
 
 data class RequestResource(
     val res: DrawableResource,
-    val environment: ResourceEnvironment
+    val environment: ResourceEnvironment,
+    override val resize: Resize? = null,
 ) : Request.Sync()
