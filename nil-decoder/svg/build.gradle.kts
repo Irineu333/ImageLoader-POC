@@ -41,7 +41,9 @@ kotlin {
 
         androidMain {
             dependencies {
-                implementation(libs.compottie)
+                implementation("org.apache.xmlgraphics:batik-transcoder:1.17")
+                implementation("org.apache.xmlgraphics:batik-codec:1.17")
+
             }
         }
 
@@ -51,6 +53,10 @@ kotlin {
 
         val desktopMain by getting {
             dependsOn(nonAndroidMain)
+            dependencies {
+                implementation("org.apache.xmlgraphics:batik-transcoder:1.17")
+                implementation("org.apache.xmlgraphics:batik-codec:1.17")
+            }
         }
 
         iosMain {

@@ -1,5 +1,8 @@
 package com.neoutils.nil.decoder.svg.impl
 
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import com.neoutils.nil.core.exception.NotSupportFormat
 import com.neoutils.nil.core.extension.resourceCatching
@@ -8,10 +11,10 @@ import com.neoutils.nil.core.foundation.Decoder
 import com.neoutils.nil.core.util.Resource
 import com.neoutils.nil.core.util.Support
 import com.neoutils.nil.decoder.svg.format.SVG_REGEX
-import io.github.alexzhirkevich.compottie.LottieComposition
-import io.github.alexzhirkevich.compottie.LottieCompositionFactory
-import io.github.alexzhirkevich.compottie.LottiePainter
-import kotlinx.coroutines.runBlocking
+import org.apache.batik.transcoder.TranscoderInput
+import org.apache.batik.transcoder.TranscoderOutput
+import org.apache.batik.transcoder.image.PNGTranscoder
+import java.io.ByteArrayOutputStream
 
 class AndroidSvgDecoder : Decoder {
 
@@ -25,8 +28,16 @@ class AndroidSvgDecoder : Decoder {
         }
 
         return resourceCatching {
-            val composition = LottieCompositionFactory.fromBytes(input).value
-            LottiePainter(composition)
+            val transcoderInput = TranscoderInput(input.inputStream())
+            val outputStream = ByteArrayOutputStream()
+            val transcoderOutput = TranscoderOutput(outputStream)
+
+            val transcoder = PNGTranscoder()
+            transcoder.transcode(transcoderInput, transcoderOutput)
+
+            val byteArray = outputStream.toByteArray()
+            val bitmap = org.jetbrains.skia.Image.makeFromEncoded(byteArray).asImageBitmap()
+            BitmapPainter(bitmap)
         }
     }
 
