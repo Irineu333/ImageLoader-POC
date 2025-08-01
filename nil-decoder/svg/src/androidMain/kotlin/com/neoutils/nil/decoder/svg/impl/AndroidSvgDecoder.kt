@@ -2,7 +2,6 @@ package com.neoutils.nil.decoder.svg.impl
 
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.decodeToImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import com.neoutils.nil.core.exception.NotSupportFormat
@@ -34,10 +33,12 @@ class AndroidSvgDecoder : Decoder {
             val transcoderOutput = TranscoderOutput(outputStream)
 
             val transcoder = PNGTranscoder()
+            transcoder.addTranscodingHint(PNGTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, true)
             transcoder.transcode(transcoderInput, transcoderOutput)
 
             val byteArray = outputStream.toByteArray()
-            BitmapPainter(byteArray.decodeToImageBitmap())
+            val bitmap = org.jetbrains.skia.Image.makeFromEncoded(byteArray).asImageBitmap()
+            BitmapPainter(bitmap)
         }
     }
 

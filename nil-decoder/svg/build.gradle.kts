@@ -36,7 +36,6 @@ kotlin {
                 // compose
                 implementation(compose.runtime)
                 implementation(compose.ui)
-                implementation(compose.components.resources)
             }
         }
 

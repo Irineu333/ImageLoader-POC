@@ -14,10 +14,8 @@ import com.neoutils.nil.core.contract.Request
 import com.neoutils.nil.core.painter.PainterResource
 import com.neoutils.nil.decoder.bitmap.extension.bitmap
 import com.neoutils.nil.decoder.gif.extension.gif
-import com.neoutils.nil.decoder.svg.extension.svg
 import com.neoutils.nil.decoder.xml.extension.xml
 import com.neoutils.nil.example.resources.Res
-import com.neoutils.nil.example.resources.atom
 import com.neoutils.nil.example.resources.atom_vector
 import com.neoutils.nil.fetcher.network.extension.network
 import com.neoutils.nil.fetcher.resources.compose.ResourcesPreview
@@ -32,12 +30,8 @@ fun App() = Box(
 ) {
 
     val resource = asyncPainterResource(
-        request = Request.resource(Res.drawable.atom),
-    ) {
-        decoders {
-            svg()
-        }
-    }
+        request = Request.network("https://cataas.com/cat"),
+    )
 
     when (resource) {
         is PainterResource.Result.Success -> {
