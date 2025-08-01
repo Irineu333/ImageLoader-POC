@@ -41,7 +41,7 @@ kotlin {
 
         androidMain {
             dependencies {
-                implementation(libs.androidsvg)
+                implementation(libs.compottie)
             }
         }
 

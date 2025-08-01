@@ -1,19 +1,19 @@
 package com.neoutils.nil.decoder.svg.impl
 
 import androidx.compose.ui.graphics.painter.Painter
-import com.caverock.androidsvg.SVG
 import com.neoutils.nil.core.exception.NotSupportFormat
-import com.neoutils.nil.core.constant.DensityExtrasKey
 import com.neoutils.nil.core.extension.resourceCatching
 import com.neoutils.nil.core.util.Extras
 import com.neoutils.nil.core.foundation.Decoder
 import com.neoutils.nil.core.util.Resource
 import com.neoutils.nil.core.util.Support
 import com.neoutils.nil.decoder.svg.format.SVG_REGEX
-import com.neoutils.nil.decoder.svg.painter.AndroidSvgPainter
+import io.github.alexzhirkevich.compottie.LottieComposition
+import io.github.alexzhirkevich.compottie.LottieCompositionFactory
+import io.github.alexzhirkevich.compottie.LottiePainter
+import kotlinx.coroutines.runBlocking
 
-// don't support preview
-class AndroidSvgDecoder() : Decoder {
+class AndroidSvgDecoder : Decoder {
 
     override suspend fun decode(
         input: ByteArray,
@@ -25,10 +25,8 @@ class AndroidSvgDecoder() : Decoder {
         }
 
         return resourceCatching {
-
-            val density = extras[DensityExtrasKey]
-
-            AndroidSvgPainter(SVG.getFromInputStream(input.inputStream()), density)
+            val composition = LottieCompositionFactory.fromBytes(input).value
+            LottiePainter(composition)
         }
     }
 
