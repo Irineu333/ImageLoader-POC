@@ -43,7 +43,7 @@ kotlin {
             dependencies {
                 implementation("org.apache.xmlgraphics:batik-transcoder:1.17")
                 implementation("org.apache.xmlgraphics:batik-codec:1.17")
-
+                implementation(libs.compose.ui.graphics)
             }
         }
 
